@@ -8,6 +8,7 @@ class ProductoController extends Producto implements IApiUsable
   {
 
     $parametros = $request->getParsedBody();
+    $parametros = (array)$request->getParsedBody();
     $archivo = $request->getUploadedFiles();
 
     var_dump($parametros);
