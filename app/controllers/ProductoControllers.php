@@ -1,5 +1,5 @@
 <?php
-require_once './models/producto.php';
+require_once './models/Producto.php';
 require_once './interfaces/IApiUsable.php';
 
 class ProductoController extends Producto implements IApiUsable
@@ -10,7 +10,7 @@ class ProductoController extends Producto implements IApiUsable
     $parametros = $request->getParsedBody();
     $archivo = $request->getUploadedFiles();
 
-    if ($parametros != null && count($parametros) == 3) {
+    if ($parametros != null && count($parametros) >= 1) {
       try {
         // var_dump($parametros);
         $nombre = $parametros['nombre'];
@@ -20,30 +20,16 @@ class ProductoController extends Producto implements IApiUsable
         if (!$usuario1) {
 
           $precio = $parametros['precio'];
-          $nombre = $parametros['nombre'];
-          $nacionalidad = $parametros['nacionalidad'];
+          $medida = $parametros['medida'];
+          $x_mayor = $parametros['x_mayor'];
 
-          try {
-            // var_dump($archivo['foto']);
-            $foto = $archivo['foto'];
-            if (is_null($foto) || $foto->getClientMediaType() == "") {
-              throw new Exception("No file");
-            }
-            $ext = $foto->getClientMediaType();
-            // var_dump($ext);
-            $ext = explode("/", $ext)[1];
-            $ruta = "./Cryptos/" . $nombre . "." . $ext;
-            $foto->moveTo($ruta); //mueve la imagen recibida a esa ruta
-          } catch (Exception $e) {
-            echo "no se pudo subir la imagen";
-            $ruta = "";
-          }
+
           // Creamos el usuario
           $usr = new Producto();
           $usr->precio = $precio;
           $usr->nombre = $nombre;
-          $usr->foto = $ruta;
-          $usr->nacionalidad = $nacionalidad;
+          $usr->x_mayor = $x_mayor;
+          $usr->medida = $medida;
 
           $id = $usr->crearUno();
 
@@ -56,7 +42,7 @@ class ProductoController extends Producto implements IApiUsable
         $payload = json_encode(array('error' => $e->getMessage()));
       }
     } else {
-      $payload = json_encode('error no hay datos:precio,nombre,foto,nacionalidad');
+      $payload = json_encode('error no hay datos:precio,nombre,x_mayor');
     }
 
 

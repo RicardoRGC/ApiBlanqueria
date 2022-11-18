@@ -20,7 +20,6 @@ require_once './middlewares/GuardarBorradoMiddlewares.php';
 require_once './middlewares/EntradaMiddlewares.php';
 require_once './middlewares/VerificarMiddleware.php';
 require_once './middlewares/VerificarAdminMiddleware.php';
-
 require_once './controllers/UsuarioController.php';
 require_once './controllers/VentaControllers.php';
 require_once './controllers/ProductoControllers.php';
@@ -54,44 +53,27 @@ $app->group(
  )*/;
 //-------------------------------------------------------------------------------------------------------------------------------------
 // Routes------------------------------------------------------------------------------------------------------------------------
-$app->group(
-  '/ventas',
-  function (RouteCollectorProxy $group) {
-    $group->get('/pdf', \VentaController::class . ':VentasPdf');
-    // 6-(POST)Alta de ventaCripto (id,fecha,cantidad…y demás datos que crea necesarios) además de tener
-    // una imagen (jpg , jpeg ,png)asociada a la venta que será nombrada por el nombre de la cripto ,el
-    // nombre del cliente más la fecha en la carpeta /FotosCripto ->cualquier usuario registrado(JWT)
-    $group->post('[/alta]', \VentaController::class . ':CargarUno')->add(new VerificarMiddleware()); //cargar
-    // 7- (GET)Traer todas las ventas de cripto “alemanas” entre en 10 y 13 de junio ->solo admin(JWT)
-    $group->get('[/EEUU]', \VentaController::class . ':TraerPaisFecha')->add(new VerificarAdminMiddleware());
 
-    // 8-(GET)l Traer todos los usuarios que compraron la moneda eterium(o cualquier otra, buscada por
-    // nombre)->solo admin(JWT)
-    $group->get('/traerUsuarios', \VentaController::class . ':TraerUsuariosPorNombreProducto')->add(new VerificarAdminMiddleware());
-  }
-) /*->add(
- new VerificarMiddleware()
- )*/;
 //-------------------------------------------------------------------------------------------------------------------------------------
 // Routes------------------------------------------------------------------------------------------------------------------------
 $app->group(
-  '/armamentos',
+  '/productos',
   function (RouteCollectorProxy $group) {
     //3-(1pt)(GET)listado de todas las cripto monedas -> sin autentificación
-    $group->get('[/]', \ArmamentoController::class . ':TraerTodos');
+    $group->get('[/]', \ProductoController::class . ':TraerTodos');
     //4-(GET)listado de todas las cripto de una nacionalidad pasada por parámetro-> sin autentificación
-    $group->get('/nacionalidad', \ArmamentoController::class . ':TraerNacionalidad');
+    $group->get('/nacionalidad', \ProductoController::class . ':TraerNacionalidad');
     // $group->get('/{usuario}', \UsuarioController::class . ':TraerUno');
     //2-(POST)Alta cripto moneda( precio, nombre, foto, nacionalidad)->solo admin/(JWT)
-    $group->post('/alta', \ArmamentoController::class . ':CargarUno')->add(new VerificarAdminMiddleware());
+    $group->post('/alta', \ProductoController::class . ':CargarUno');
 
     // 5-(1pt)(GET)traer una cripto por ID->cualquier usuario registrado
-    $group->get('/id', \ArmamentoController::class . ':TraerId')->add(new VerificarMiddleware());
+    $group->get('/id', \ProductoController::class . ':TraerId')->add(new VerificarMiddleware());
     // 9-(DELETE)borrado de una cripto por ID->solo admin (JWT)
-    $group->delete('[/]', \ArmamentoController::class . ':BorrarUno')->add(new VerificarAdminMiddleware())->add(new BorrarMiddleware());
+    $group->delete('[/]', \ProductoController::class . ':BorrarUno')->add(new VerificarAdminMiddleware())->add(new BorrarMiddleware());
     //     10-(PUT) Puede Modificar los datos de una cripto incluso la imagen , y si la imagen ya existe debe
     // guardarla en la carpeta /Backup dentro de fotos.->solo admin (JWT)
-    $group->put('[/modificar]', \ArmamentoController::class . ':ModificarUno')->add(new VerificarAdminMiddleware());
+    $group->put('[/modificar]', \ProductoController::class . ':ModificarUno')->add(new VerificarAdminMiddleware());
   }
 ) /*->add(
  new VerificarMiddleware()

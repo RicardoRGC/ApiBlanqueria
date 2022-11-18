@@ -51,7 +51,7 @@ class Producto
     public static function obtenerUno($nombre)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("SELECT id ,precio, nombre, medida ,x_mayor ,fechaBaja FROM productos WHERE nombre = :nombre");
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT id ,precio, nombre, medida ,x_mayor  FROM productos WHERE nombre = :nombre");
         $consulta->bindValue(':nombre', $nombre, PDO::PARAM_STR);
         $consulta->execute();
 
