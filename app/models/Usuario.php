@@ -10,7 +10,7 @@ class Usuario
     public function crearUsuario()
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO usuario_guerra (mail, clave,tipo) VALUES (:mail, :clave, :tipo)");
+        $consulta = $objAccesoDatos->prepararConsulta("INSERT INTO usuario (mail, clave,tipo) VALUES (:mail, :clave, :tipo)");
         $claveHash = password_hash($this->clave, PASSWORD_DEFAULT);
         $consulta->bindValue(':mail', $this->mail, PDO::PARAM_STR);
         $consulta->bindValue(':tipo', $this->tipo, PDO::PARAM_STR);
@@ -23,7 +23,7 @@ class Usuario
     public static function obtenerTodos()
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, mail, clave ,tipo  FROM usuario_guerra ");
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, mail, clave ,tipo  FROM usuario ");
         $consulta->execute();
 
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Usuario');
@@ -31,7 +31,7 @@ class Usuario
     public static function obtenerTodosBaja()
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, usuario, clave FROM usuario_guerra WHERE fechaBaja is not null ");
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, usuario, clave FROM usuario WHERE fechaBaja is not null ");
         $consulta->execute();
 
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Usuario');
@@ -40,7 +40,7 @@ class Usuario
     public static function obtenerUsuario($mail)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, mail, clave ,tipo FROM usuario_guerra WHERE mail = :mail");
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, mail, clave ,tipo FROM usuario WHERE mail = :mail");
         $consulta->bindValue(':mail', $mail, PDO::PARAM_STR);
         $consulta->execute();
 
@@ -50,7 +50,7 @@ class Usuario
     public function modificarUsuario()
     {
         $objAccesoDato = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDato->prepararConsulta("UPDATE usuario_guerra SET usuario = :usuario, clave = :clave WHERE id = :id");
+        $consulta = $objAccesoDato->prepararConsulta("UPDATE usuario SET usuario = :usuario, clave = :clave WHERE id = :id");
         $claveHash = password_hash($this->clave, PASSWORD_DEFAULT);
         $consulta->bindValue(':usuario', $this->usuario, PDO::PARAM_STR);
         $consulta->bindValue(':clave', $claveHash);
@@ -61,7 +61,7 @@ class Usuario
     public static function borrarUsuario($usuario)
     {
         $objAccesoDato = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDato->prepararConsulta("UPDATE usuario_guerra SET fechaBaja = :fechaBaja WHERE id = :id");
+        $consulta = $objAccesoDato->prepararConsulta("UPDATE usuario SET fechaBaja = :fechaBaja WHERE id = :id");
         $fecha = new DateTime(date("d-m-Y"));
         $consulta->bindValue(':fechaBaja', date_format($fecha, 'Y-m-d H:i:s'));
         $consulta->bindValue(':id', $usuario, PDO::PARAM_INT);

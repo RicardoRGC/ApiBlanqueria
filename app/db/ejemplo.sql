@@ -11,7 +11,7 @@ id_arma int not null,
 accion varchar(50) not null,
 fecha_accion date not null);
 
-create table usuario_guerra(
+create table usuario(
 id int primary key AUTO_INCREMENT not null,
 mail varchar(50) not null,
 clave varchar(50) not null,
