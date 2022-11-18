@@ -10,9 +10,9 @@ class ProductoController extends Producto implements IApiUsable
     $parametros = $request->getParsedBody();
     $archivo = $request->getUploadedFiles();
 
+    var_dump($parametros);
     if ($parametros != null && count($parametros) >= 1) {
       try {
-        // var_dump($parametros);
         $nombre = $parametros['nombre'];
 
         $usuario1 = Producto::obtenerUno($nombre);
